@@ -28,18 +28,27 @@ class FamilyStructure:
     def add_member(self, member):
         ## You have to implement this method
         ## Append the member to the list of _members
-        pass
+        self._members.append(member)
+        return self._members #placeholder
 
     def delete_member(self, id):
         ## You have to implement this method
         ## Loop the list and delete the member with the given id
-        pass
+        for member in self._members:
+            if member["id"] == id: # could also use filter using the id as the test, or get index with .index method and use pop or del
+                self._members.remove(member)
+        return self._members
 
     def get_member(self, id):
         ## You have to implement this method
         ## Loop all the members and return the one with the given id
-        pass
+        for member in self._members:
+            if member["id"] == id:
+                return member
+            else:
+                return f"Error, no member with the ID {id} found"
 
     # This method is done, it returns a list with all the family members
     def get_all_members(self):
         return self._members
+    

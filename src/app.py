@@ -37,6 +37,25 @@ def handle_hello():
                      "family": members}
     return jsonify(response_body), 200
 
+@app.route('/members/<int:member_id>', methods=['GET'])
+def get_member_path(member_id):
+    # This is how you can use the Family datastructure by calling its methods
+    member = jackson_family.get_member(member_id)
+    response_body = {"hello": "world",
+                     "family": member}
+    return jsonify(response_body), 200
+
+@app.route('/members', methods=['POST'])
+def add_member_path():
+    info = request.get_json() # get access to body
+    result = jackson_family.add_member(info)
+    return jsonify(result), 200
+
+@app.route('/members/<int:member_id>', methods=['DELETE'])
+def delete_member_path(member_id):
+    jackson_family.delete_member(member_id)
+    return f"Deleted member {member_id} successfully!", 200
+
 
 
 # This only runs if `$ python src/app.py` is executed

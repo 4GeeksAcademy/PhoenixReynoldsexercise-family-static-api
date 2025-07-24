@@ -35,15 +35,18 @@ def handle_hello():
     members = jackson_family.get_all_members()
     response_body = {"hello": "world",
                      "family": members}
-    return jsonify(response_body), 200
+    return jsonify(members), 200 # changed to members instead of response_body for the test
 
-@app.route('/members/<int:member_id>', methods=['GET'])
+@app.route('/members/<int:member_id>', methods=['GET']) # declaration of int:member_id inside the URL declares the integer as member_id, it can then be used later in the same function
 def get_member_path(member_id):
     # This is how you can use the Family datastructure by calling its methods
     member = jackson_family.get_member(member_id)
-    response_body = {"hello": "world",
-                     "family": member}
-    return jsonify(response_body), 200
+    print("bongos", member, member_id)
+    if not member:
+        return jsonify({
+            "message" : "hey we ain't found shit"
+        }), 404
+    return jsonify(member), 200
 
 @app.route('/members', methods=['POST'])
 def add_member_path():
@@ -51,10 +54,19 @@ def add_member_path():
     result = jackson_family.add_member(info)
     return jsonify(result), 200
 
+@app.route('/members', methods=['PUT']) # Edit this later
+def edit_member_path():
+    info = request.get_json()
+    result = jackson_family.add_member(info)
+    return jsonify(result), 200
+
 @app.route('/members/<int:member_id>', methods=['DELETE'])
-def delete_member_path(member_id):
-    jackson_family.delete_member(member_id)
-    return f"Deleted member {member_id} successfully!", 200
+def delete_member_path(member_id): # 
+    result = jackson_family.delete_member(int(member_id)) # 
+    if result == None: #if statement to determine success or error code
+        return f"Error, no member with the ID {member_id} found", 404
+    else:
+        return jsonify({"done": True}) # had to look at the documentation (readme) for what was expected to be returned
 
 
 

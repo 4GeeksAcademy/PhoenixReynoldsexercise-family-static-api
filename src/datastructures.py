@@ -16,6 +16,20 @@ class FamilyStructure:
                 "last_name": last_name,
                 "age": 33,
                 "lucky_numbers": [7, 13, 22]
+            },
+            {
+                "id": self._generate_id(),
+                "first_name": "Jane",
+                "last_name": last_name,
+                "age": 35,
+                "lucky_numbers": [10, 14, 3]
+            },
+            {
+                "id": self._generate_id(),
+                "first_name": "Jimmy",
+                "last_name": last_name,
+                "age": 5,
+                "lucky_numbers": [1]
             }
         ]
 
@@ -28,8 +42,10 @@ class FamilyStructure:
     def add_member(self, member):
         ## You have to implement this method
         ## Append the member to the list of _members
+        if "id" not in member:
+            member["id"] = self._generate_id() # generates id for a member if there isn't one already
         self._members.append(member)
-        return self._members #placeholder
+        return member #placeholder, add a 400 for record already existing and a 500 for server error, changed to member instead of self._members to return only the individual
 
     def delete_member(self, id):
         ## You have to implement this method
@@ -37,16 +53,16 @@ class FamilyStructure:
         for member in self._members:
             if member["id"] == id: # could also use filter using the id as the test, or get index with .index method and use pop or del
                 self._members.remove(member)
-        return self._members
+                return self._members
+        return None
 
     def get_member(self, id):
         ## You have to implement this method
         ## Loop all the members and return the one with the given id
         for member in self._members:
             if member["id"] == id:
-                return member
-            else:
-                return f"Error, no member with the ID {id} found"
+                return member # no else because reasons
+        return None # different type of else because of other reasons (it would overwrite itself and just give up the info it already had)
 
     # This method is done, it returns a list with all the family members
     def get_all_members(self):
